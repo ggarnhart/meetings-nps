@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 export type UserContextType = {
   name?: string;
@@ -12,10 +12,10 @@ export type CompanyContextType = {
   workspace?: string;
 };
 
-export type AppContextType = {
-  user: UserContextType;
-  company: CompanyContextType;
-};
+// export type AppContextType = {
+//   user: UserContextType;
+//   company: CompanyContextType;
+// };
 
 interface AppWrapperProps {
   children?: any;

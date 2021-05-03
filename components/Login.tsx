@@ -7,7 +7,6 @@ export default function Login() {
   const [password, setPassword] = useState("" as string);
   const [showNewUserForm, setNewUserFrom] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
-  // const [user, setUser] = useContext(AppContext);
 
   const {
     user: [user, setUser],
@@ -56,12 +55,17 @@ export default function Login() {
         let foundUser = data[0];
         console.log("!!");
         console.log(foundUser);
+        setUser({
+          name: foundUser.name,
+          email: foundUser.email,
+          gid: foundUser.gid,
+        });
       }
     }
   };
   return (
     <>
-      <button
+      {/* <button
         className="w-48 px-2 py-2 my-2 border border-gray-800 border-solid"
         onClick={() => console.log(user)}
       >
@@ -84,7 +88,7 @@ export default function Login() {
         }
       >
         Update User
-      </button>
+      </button> */}
       {!authSuccess && (
         <div className="flex flex-col justify-center px-6 py-4 bg-white shadow-sm dark:bg-gray-600 dark:text-white">
           <h2 className="mb-2 text-xl font-light text-left">Meetings NPS</h2>
