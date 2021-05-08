@@ -21,6 +21,9 @@ export default function Nav({ pageTitle }: NavProps) {
         <div className="mx-2">
           <Link href="/account">Account</Link>
         </div>
+        <div className="mx-2">
+          <Link href="/install">Install</Link>
+        </div>
       </div>
     </div>
   );

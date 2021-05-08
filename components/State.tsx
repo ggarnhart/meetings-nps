@@ -12,11 +12,6 @@ export type CompanyContextType = {
   workspace?: string;
 };
 
-// export type AppContextType = {
-//   user: UserContextType;
-//   company: CompanyContextType;
-// };
-
 interface AppWrapperProps {
   children?: any;
 }
