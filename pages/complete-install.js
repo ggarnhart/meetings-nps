@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { AlertCircle } from "tabler-icons-react";
 import Spinner from "../components/Spinner";
+import { v4 as uuidv4 } from "uuid";
+
+import { addTeam } from "../supabase/teams";
 
 export default function CompleteInstall() {
   const [installComplete, setInstallComplete] = useState(-1);
@@ -21,13 +24,22 @@ export default function CompleteInstall() {
                 code: code,
                 client_id: process.env.client_id,
                 client_secret: process.env.client_secret,
-                redirect_uri: "https://e1cff33180bf.ngrok.io/complete-install",
+                redirect_uri: "https://29cbe3cdc7e6.ngrok.io/complete-install",
               },
             }
           );
 
           if (result) {
-            console.log(result.data);
+            let { data } = result;
+
+            await addTeam({
+              name: data.team.name,
+              slack_team_id: data.team.id,
+              token: data.access_token,
+              gid: uuidv4(),
+              bot_user_id: data.bot_user_id,
+            });
+
             setInstallComplete(1);
           }
         } catch (err) {

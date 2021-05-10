@@ -21,3 +21,20 @@ export interface SupabaseUser {
   team_gid: any;
   email: string;
 }
+
+export interface SupabaseTeam {
+  id?: number;
+  name: string;
+  token: string;
+  gid: any;
+  slack_team_id: string;
+  bot_user_id: string;
+}
+
+export interface SupabaseMeeting {
+  id?: number; // this is auto generated
+  gid: any;
+  name?: string;
+  team_gid: any;
+  date_created?: Date; // this is auto generated
+}

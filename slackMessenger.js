@@ -1,9 +1,16 @@
 import { WebClient, LogLevel } from "@slack/web-api";
+import { findTeamBySlackTeamId } from "./supabase/teams";
 
-//TODO: obviously remove the hardcoded xapp
-export const client = new WebClient(
-  "xoxb-940252849568-2032342463828-S5exsRLR2qyBwoVv6iyZMnKN",
-  {
+export const clientFromTeamId = async (teamId) => {
+  let teams = await findTeamBySlackTeamId(teamId);
+  let team = teams[0];
+  return new WebClient(team.token, {
     logLevel: LogLevel.DEBUG,
-  }
-);
+  });
+};
+
+export const clientFromTeamToken = (teamToken) => {
+  return new WebClient(teamToken, {
+    logLevel: LogLevel.DEBUG,
+  });
+};
