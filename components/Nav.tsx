@@ -5,21 +5,21 @@ interface NavProps {
 }
 export default function Nav({ pageTitle }: NavProps) {
   return (
-    <div className="absolute top-0 flex justify-between w-screen p-8 overflow-x-auto bg-white dark:bg-gray-800">
+    <div className="absolute top-0 flex justify-between w-screen p-8 overflow-x-hidden bg-transparent">
       <Head>
-        <title>{pageTitle ? pageTitle : "Meetings NPS"}</title>
+        <title>{pageTitle ? pageTitle : "TalkBack"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h2 className="text-xl font-bold">Meetings NPS</h2>
+      <h2 className="text-xl font-bold">TalkBack</h2>
       <div className="flex justify-around">
         <div className="mx-2">
           <Link href="/">Home</Link>
         </div>
         <div className="mx-2">
-          <Link href="/meetings">Meetings</Link>
+          <Link href="/features">Features</Link>
         </div>
         <div className="mx-2">
-          <Link href="/account">Account</Link>
+          <Link href="/pricing">Pricing</Link>
         </div>
         <div className="mx-2">
           <Link href="/install">Install</Link>

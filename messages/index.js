@@ -1,11 +1,11 @@
-export const negativeFollowUp = (meetingId) => {
+export const negativeFollowUp = (ratingId) => {
   return [
     {
       type: "section",
       text: {
         type: "plain_text",
         text:
-          "Thanks for the feedback! It seems like you didn't love this meeting — trust us, we've been there. If you're open to sharing, we'd love to learn why!",
+          "Thanks for the feedback! It seems like you didn't love this meeting — trust us, we've been there. If you're open to sharing, we'd love to learn why! Most people finish the follow-up questions in under 30 seconds.",
         emoji: true,
       },
     },
@@ -20,7 +20,7 @@ export const negativeFollowUp = (meetingId) => {
             emoji: true,
           },
           style: "primary",
-          value: meetingId,
+          value: ratingId,
           action_id: "affirm-feedback-questions-negative",
         },
         {
@@ -30,7 +30,7 @@ export const negativeFollowUp = (meetingId) => {
             text: "Not this time",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "decline-feedback-questions-negative",
         },
       ],
@@ -48,7 +48,7 @@ export const confirmNegativeFollowUpDesired = [
   },
 ];
 
-export const wasMeetingNecessary = (meetingId) => {
+export const wasMeetingNecessary = (ratingId) => {
   return [
     {
       type: "section",
@@ -68,7 +68,7 @@ export const wasMeetingNecessary = (meetingId) => {
             text: "👍",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "meeting-was-necessary",
         },
         {
@@ -78,7 +78,7 @@ export const wasMeetingNecessary = (meetingId) => {
             text: "👎",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "meeting-was-not-necessary",
         },
       ],
@@ -86,7 +86,7 @@ export const wasMeetingNecessary = (meetingId) => {
   ];
 };
 
-export const wasInputValued = (meetingId) => {
+export const wasInputValued = (ratingId) => {
   return [
     {
       type: "section",
@@ -106,7 +106,7 @@ export const wasInputValued = (meetingId) => {
             text: "👍",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "presence-was-needed",
         },
         {
@@ -116,7 +116,7 @@ export const wasInputValued = (meetingId) => {
             text: "👎",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "presence-was-not-needed",
         },
       ],
@@ -124,7 +124,7 @@ export const wasInputValued = (meetingId) => {
   ];
 };
 
-export const wasMeetingRightLength = (meetingId) => {
+export const wasMeetingRightLength = (ratingId) => {
   return [
     {
       type: "section",
@@ -144,7 +144,7 @@ export const wasMeetingRightLength = (meetingId) => {
             text: "Too Short",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "meeting-too-short",
         },
         {
@@ -154,7 +154,7 @@ export const wasMeetingRightLength = (meetingId) => {
             text: "Just Right",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "meeting-right-length",
         },
         {
@@ -164,7 +164,7 @@ export const wasMeetingRightLength = (meetingId) => {
             text: "Too Long",
             emoji: true,
           },
-          value: meetingId,
+          value: ratingId,
           action_id: "meeting-too-long",
         },
       ],
@@ -172,14 +172,14 @@ export const wasMeetingRightLength = (meetingId) => {
   ];
 };
 
-export const lastComments = (meetingId) => {
+export const lastComments = (ratingId) => {
   return [
     {
       dispatch_action: true,
       type: "input",
       element: {
         type: "plain_text_input",
-        action_id: `last-thoughts-${meetingId}`,
+        action_id: `last-thoughts-${ratingId}`,
       },
       label: {
         type: "plain_text",

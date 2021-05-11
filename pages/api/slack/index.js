@@ -7,6 +7,8 @@ import {
   wasMeetingRightLength,
 } from "../../../messages";
 import { clientFromTeamId } from "../../../slackMessenger";
+import { v4 as uuidv4 } from "uuid";
+import { addInitialRating, updateRating } from "../../../supabase/ratings";
 
 const axios = require("axios");
 
@@ -20,12 +22,15 @@ export default async (req, res) => {
 
       if (action_id.indexOf("buttonRating") !== -1) {
         let [buttonValue, meetingId] = extractValueAndMeetingId(value);
+        let ratings = await addRating(user, meetingId, buttonValue);
+        let rating = ratings[0];
         if (buttonValue < 6) {
           try {
+            console.log(rating);
             await sendBlockMessage(
               client,
               channel.id,
-              [negativeFollowUp(meetingId)],
+              [negativeFollowUp(rating.gid)],
               user.id,
               true
             );
@@ -37,9 +42,9 @@ export default async (req, res) => {
           res.status(200).json({ data: "John Doe" });
         }
       } else {
+        res.status(200).json({ data: "Okay!" });
         switch (action_id) {
           case "affirm-feedback-questions-negative":
-            console.log(value);
             await sendNegativeFeedbackQuestions(
               client,
               body.response_url,
@@ -47,7 +52,6 @@ export default async (req, res) => {
               user.id,
               value
             );
-            res.status(200).json({ data: "Okay!" });
             break;
           case "decline-feedback-questions-negative":
             const replace = {
@@ -61,53 +65,74 @@ export default async (req, res) => {
               replace_original: true,
               text: "Glad to hear!",
             });
+            await updateRating({
+              gid: value,
+              meeting_necessary: true,
+            });
             break;
           case "meeting-was-not-necessary":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text: "Yikes! Good to know. Thank you!",
             });
+            await updateRating({
+              gid: value,
+              meeting_necessary: false,
+            });
             break;
           case "presence-was-needed":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text: "Sweet!",
             });
+            await updateRating({
+              gid: value,
+              input_valued: true,
+            });
             break;
           case "presence-was-not-needed":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text: "Ah! So sorry about that. Thanks for the feedback.",
             });
+            await updateRating({
+              gid: value,
+              input_valued: false,
+            });
             break;
           case "meeting-too-short":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text:
                 "A few extra minutes can definitely be helpful. Thanks for the feedback!",
             });
+            await updateRating({
+              gid: value,
+              meeting_right_length: -1,
+            });
             break;
           case "meeting-right-length":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text: "A perfectly timed meeting?! Congats!",
             });
+            await updateRating({
+              gid: value,
+              meeting_right_length: 0,
+            });
             break;
           case "meeting-too-long":
-            res.status(200).json({ data: "okay!" });
             await axios.post(body.response_url, {
               replace_original: true,
               text:
                 "Thanks for the heads up. We've made note of your feedback!",
             });
+            await updateRating({
+              gid: value,
+              meeting_right_length: 1,
+            });
             break;
           case "dismiss-comment":
-            res.status(200).json({ data: "okay!" });
             const replaceCommentField = {
               replace_original: true,
               text: "_Comment Response Dismissed_",
@@ -142,8 +167,8 @@ const sendNegativeFeedbackQuestions = async (
         wasMeetingNecessary(meetingId),
         wasInputValued(meetingId),
         wasMeetingRightLength(meetingId),
-        lastComments(meetingId),
       ],
+      // removed lastComments(meetingId), from the above array. could put it back later
       userId,
       true
     );
@@ -186,4 +211,15 @@ const extractValueAndMeetingId = (value) => {
   let meetingId = value.substring(dash + 1);
 
   return [buttonValue, meetingId];
+};
+
+const addRating = async (user, meetingGid, ratingValue) => {
+  let ratingObject = {
+    gid: uuidv4(),
+    meeting_gid: meetingGid,
+    rating: ratingValue,
+    user_id: user.id,
+  };
+  let rating = await addInitialRating(ratingObject);
+  return rating;
 };
