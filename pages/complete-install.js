@@ -24,7 +24,7 @@ export default function CompleteInstall() {
                 code: code,
                 client_id: process.env.client_id,
                 client_secret: process.env.client_secret,
-                redirect_uri: "https://29cbe3cdc7e6.ngrok.io/complete-install",
+                redirect_uri: "https://talkback.ngrok.io/complete-install",
               },
             }
           );

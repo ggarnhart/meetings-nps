@@ -1,3 +1,5 @@
+@import "~react-vis/dist/style";
+
 /* particle field landing */
 @keyframes float {
   0% {

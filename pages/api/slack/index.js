@@ -19,7 +19,7 @@ export default async (req, res) => {
     let client = await clientFromTeamId(team.id);
     if (body.actions) {
       const { action_id, value } = body.actions[0];
-
+      // console.log({ action_id, value });
       if (action_id.indexOf("buttonRating") !== -1) {
         let [buttonValue, meetingId] = extractValueAndMeetingId(value);
         let ratings = await addRating(user, meetingId, buttonValue);
@@ -103,8 +103,7 @@ export default async (req, res) => {
           case "meeting-too-short":
             await axios.post(body.response_url, {
               replace_original: true,
-              text:
-                "A few extra minutes can definitely be helpful. Thanks for the feedback!",
+              text: "A few extra minutes can definitely be helpful. Thanks for the feedback!",
             });
             await updateRating({
               gid: value,
@@ -124,8 +123,7 @@ export default async (req, res) => {
           case "meeting-too-long":
             await axios.post(body.response_url, {
               replace_original: true,
-              text:
-                "Thanks for the heads up. We've made note of your feedback!",
+              text: "Thanks for the heads up. We've made note of your feedback!",
             });
             await updateRating({
               gid: value,
