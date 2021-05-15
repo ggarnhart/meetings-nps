@@ -1,11 +1,49 @@
+export const positiveFollowUp = (ratingId) => {
+  return [
+    {
+      type: "section",
+      text: {
+        type: "plain_text",
+        text: "Thanks for the feedback! It seems like this meeting went pretty well. If you're open to sharing, we'd love to learn why! Most people finish the follow-up questions in under 30 seconds.",
+        emoji: true,
+      },
+    },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Sure",
+            emoji: true,
+          },
+          style: "primary",
+          value: ratingId,
+          action_id: "affirm-feedback-questions-positive",
+        },
+        {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Not this time",
+            emoji: true,
+          },
+          value: ratingId,
+          action_id: "decline-feedback-questions-positive",
+        },
+      ],
+    },
+  ];
+};
+
 export const negativeFollowUp = (ratingId) => {
   return [
     {
       type: "section",
       text: {
         type: "plain_text",
-        text:
-          "Thanks for the feedback! It seems like you didn't love this meeting — trust us, we've been there. If you're open to sharing, we'd love to learn why! Most people finish the follow-up questions in under 30 seconds.",
+        text: "Thanks for the feedback! It seems like you didn't love this meeting — trust us, we've been there. If you're open to sharing, we'd love to learn why! Most people finish the follow-up questions in under 30 seconds.",
         emoji: true,
       },
     },
@@ -183,8 +221,7 @@ export const lastComments = (ratingId) => {
       },
       label: {
         type: "plain_text",
-        text:
-          "Any last thoughts? Comments are anonymized, if it makes a difference.",
+        text: "Any last thoughts? Comments are anonymized, if it makes a difference.",
         emoji: true,
       },
     },
@@ -192,8 +229,7 @@ export const lastComments = (ratingId) => {
       type: "section",
       text: {
         type: "mrkdwn",
-        text:
-          "No comments? No worries. You can leave this message here or dismiss it using the button.",
+        text: "No comments? No worries. You can leave this message here or dismiss it using the button.",
       },
       accessory: {
         type: "button",
@@ -216,8 +252,7 @@ export const buildRateMessage = (meetingId) => {
       type: "section",
       text: {
         type: "plain_text",
-        text:
-          "Hello! Please rate your meeting on a 1-10 scale with 1 being the lowest and 10 being the highest.",
+        text: "Hello! Please rate your meeting on a 1-10 scale with 1 being the lowest and 10 being the highest.",
         emoji: true,
       },
     },

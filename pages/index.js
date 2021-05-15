@@ -9,15 +9,14 @@ export default function Home() {
           <h1 className="my-4 text-4xl font-bold">
             We spend a lot of time in meetings. Let's make the most of it.
           </h1>
-          <p className="my-4 text-lg">
+          <p className="mt-4 mb-6 text-lg">
             <span className="font-bold">Talkback</span> gives your team tools to
             review meetings in under 30 seconds.
           </p>
-          <Link href="/pricing">
-            <span className="px-4 py-2 my-4 text-lg transition-all duration-200 ease-in-out bg-indigo-700 rounded cursor-pointer hover:shadow-xl">
-              See Features
-            </span>
-          </Link>
+
+          <span className="px-4 py-2 my-6 text-lg transition-all duration-200 ease-in-out bg-indigo-700 rounded cursor-pointer hover:shadow-xl">
+            <Link href="/pricing">See Features</Link>
+          </span>
         </div>
       </div>
     </div>

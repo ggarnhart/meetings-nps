@@ -40,10 +40,9 @@ export const godModeMeetings = async () => {
 
 export const getMeetingsByTeam = async (teamGid: any) => {
   try {
-    console.log(teamGid);
     const { data, error } = await supabase
       .from(supabaseTables.meetings)
-      .select("name, gid, date_created")
+      .select("name, gid, date_created, ratings(rating)")
       .eq("team_gid", teamGid);
     if (data) {
       return data;
@@ -197,4 +196,34 @@ export const getRatingAverageByWeek = async () => {
   });
 
   return weekAveragePairs;
+};
+
+export const getMeetingsCount = async () => {
+  const { data, error } = await supabase
+    .from(supabaseTables.meetings)
+    .select("name, gid, date_created");
+
+  return data.length;
+};
+
+export const getRatingsCountAndAverage = async () => {
+  const { data: meetings, error } = await supabase
+    .from(supabaseTables.meetings)
+    .select(`ratings(rating)`);
+
+  let allRatings = Array<number>();
+  meetings.forEach((meeting) => {
+    let ratings = meeting.ratings;
+    ratings.forEach((rating) => {
+      allRatings.push(rating.rating);
+    });
+  });
+
+  let average =
+    allRatings.reduce((accumulator, current) => accumulator + current, 0) /
+    allRatings.length;
+  return {
+    average: average,
+    count: allRatings.length,
+  };
 };

@@ -5,6 +5,7 @@ import {
   wasInputValued,
   lastComments,
   wasMeetingRightLength,
+  positiveFollowUp,
 } from "../../../messages";
 import { clientFromTeamId } from "../../../slackMessenger";
 import { v4 as uuidv4 } from "uuid";
@@ -26,7 +27,6 @@ export default async (req, res) => {
         let rating = ratings[0];
         if (buttonValue < 6) {
           try {
-            console.log(rating);
             await sendBlockMessage(
               client,
               channel.id,
@@ -39,13 +39,25 @@ export default async (req, res) => {
             console.log(err);
           }
         } else {
-          res.status(200).json({ data: "John Doe" });
+          try {
+            await sendBlockMessage(
+              client,
+              channel.id,
+              [positiveFollowUp(rating.gid)],
+              user.id,
+              true
+            );
+            res.status(200).json({ data: "Okay!" });
+          } catch (err) {
+            console.error(error);
+          }
         }
       } else {
         res.status(200).json({ data: "Okay!" });
         switch (action_id) {
+          case "affirm-feedback-questions-positive":
           case "affirm-feedback-questions-negative":
-            await sendNegativeFeedbackQuestions(
+            await sendFeedbackQuestions(
               client,
               body.response_url,
               channel.id,
@@ -145,7 +157,7 @@ export default async (req, res) => {
   }
 };
 
-const sendNegativeFeedbackQuestions = async (
+const sendFeedbackQuestions = async (
   client,
   responseUrl,
   channel,

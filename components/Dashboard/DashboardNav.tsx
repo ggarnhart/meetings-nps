@@ -7,7 +7,7 @@ export default function DashboardNav() {
   return (
     <>
       {open && (
-        <div className="flex flex-col w-full shadow-inner bg-indigo-50 md:w-1/6">
+        <div className="flex flex-col w-full shadow-inner bg-indigo-50 md:w-1/6 dark:bg-indigo-800 dark:text-white">
           <div className="py-4 pl-6">
             <div className="mb-8 font-bold">talkback.</div>
             {/* example of the selected page. we can use useRouter*/}

@@ -10,7 +10,7 @@ export default function Nav({ pageTitle }: NavProps) {
         <title>{pageTitle ? pageTitle : "TalkBack"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h2 className="text-xl font-bold">TalkBack</h2>
+      <h2 className="text-xl font-bold">talkback.</h2>
       <div className="flex justify-around">
         <div className="mx-2">
           <Link href="/">Home</Link>
@@ -23,6 +23,9 @@ export default function Nav({ pageTitle }: NavProps) {
         </div>
         <div className="mx-2">
           <Link href="/install">Install</Link>
+        </div>
+        <div className="mx-2">
+          <Link href="/dashboard">Dashboard</Link>
         </div>
       </div>
     </div>
