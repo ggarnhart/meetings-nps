@@ -38,17 +38,37 @@ export const godModeMeetings = async () => {
   }
 };
 
+type QueriedRating = {
+  rating: number;
+};
+
+export type MeetingsAndRatings = {
+  name: string;
+  gid: any;
+  date_created: string;
+  ratings: Array<QueriedRating>;
+  averageRating?: number;
+};
+
 export const getMeetingsByTeam = async (teamGid: any) => {
   try {
-    const { data, error } = await supabase
+    const { data: meetingsUntyped, error } = await supabase
       .from(supabaseTables.meetings)
       .select("name, gid, date_created, ratings(rating)")
       .eq("team_gid", teamGid);
-    if (data) {
-      return data;
+    if (meetingsUntyped) {
+      let meetings: Array<MeetingsAndRatings> = meetingsUntyped;
+      meetings.sort(
+        (a, b) =>
+          new Date(b.date_created).getTime() -
+          new Date(a.date_created).getTime()
+      );
+      meetings.forEach((meeting) => {
+        meeting.averageRating = getMeetingRatingAverage(meeting);
+      });
+      return meetings;
     } else {
       console.error(error);
-      return error;
     }
   } catch (err) {
     console.log("Error in getting meetings by team");
@@ -226,4 +246,16 @@ export const getRatingsCountAndAverage = async () => {
     average: average,
     count: allRatings.length,
   };
+};
+
+export const getSpecificMeetingDetails = async (meetingGid: any) => {
+  const { data: meeting, error } = await supabase
+    .from(supabaseTables.meetings)
+    .select(`*, ratings(*)`)
+    .eq("gid", meetingGid);
+  if (meeting) {
+    return meeting;
+  } else {
+    console.error(error);
+  }
 };

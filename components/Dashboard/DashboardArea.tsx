@@ -17,6 +17,7 @@ import {
 import "react-vis/dist/style.css";
 import DashboardFilterBar from "./DashboardFilterBar";
 import DatePicker from "react-datepicker";
+import MeetingTable from "./MeetingTable/MeetingTable";
 
 type PlotData = {
   x: string | number;
@@ -37,9 +38,10 @@ export default function DashboardArea() {
   );
   const [startDate, setStartDate] = useState(fourWeeksAgo);
   const [endDate, setEndDate] = useState(today);
-  const [meetingCount, setMeetingCount] = useState(0);
-  const [ratingCount, setRatingCount] = useState(0);
-  const [ratingAverage, setRatingAverage] = useState(0);
+  const [meetingCount, setMeetingCount] = useState(-1);
+  const [ratingCount, setRatingCount] = useState(-1);
+  const [ratingAverage, setRatingAverage] = useState(-1);
+  const [meetingTableData, setMeetingTableData] = useState(Array<any>());
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -49,16 +51,15 @@ export default function DashboardArea() {
       let ratingCountAndAverage = await getRatingsCountAndAverage();
       setRatingCount(ratingCountAndAverage.count);
       setRatingAverage(ratingCountAndAverage.average);
+      setMeetingTableData(
+        await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
+      );
     };
     fetchGraphData();
   }, []);
 
-  const fetchData = async () => {
-    console.log(averageMeetingRatingPerWeekData);
-  };
   return (
-    <div className="flex flex-col w-full px-4 py-6 dark:bg-indigo-900">
-      {/* Dashboard Command Bar. Maybe move to own component when there is actual functionality? */}
+    <div className="flex flex-col w-full px-4 py-6 dark:bg-gray-900">
       <DashboardFilterBar
         companyName="Placeholder"
         startDate={startDate}
@@ -67,18 +68,25 @@ export default function DashboardArea() {
         setEndDate={setEndDate}
       />
       <div className="flex flex-col md:flex-row">
-        <QuickStat title="Total Meetings">{meetingCount}</QuickStat>
-        <QuickStat title="Average Rating All Time">
+        <QuickStat title="Total Meetings" loading={meetingCount === -1}>
+          {meetingCount}
+        </QuickStat>
+        <QuickStat
+          title="Average Rating All Time"
+          loading={ratingAverage === -1}
+        >
           {Math.floor(ratingAverage * 100) / 100}
         </QuickStat>
-        <QuickStat title="Total Ratings">{ratingCount}</QuickStat>
+        <QuickStat title="Total Ratings" loading={ratingCount === -1}>
+          {ratingCount}
+        </QuickStat>
       </div>
       {/* Graphs */}
       <div className="flex flex-col md:flex-row">
         {averageMeetingRatingPerWeekData &&
           averageMeetingRatingPerWeekData.length > 0 && (
             <>
-              <div className="px-4 pt-4 mx-1 my-4 bg-white rounded dark:bg-indigo-800 dark:text-white">
+              <div className="px-4 pt-4 mx-1 my-4 bg-white rounded dark:bg-gray-800 dark:text-white">
                 <h3 className="text-center">
                   Average <span className="font-bold">Meeting Ratings</span> by
                   Week
@@ -103,7 +111,7 @@ export default function DashboardArea() {
           )}
         {averageRatingPerWeekData && averageRatingPerWeekData.length > 0 && (
           <>
-            <div className="px-4 pt-4 mx-1 my-4 bg-white rounded dark:bg-indigo-800 dark:text-white">
+            <div className="px-4 pt-4 mx-1 my-4 bg-white rounded dark:bg-gray-800 dark:text-white">
               <h3 className="text-center">
                 Average <span className="font-bold">Rating</span> by Week
               </h3>
@@ -126,12 +134,7 @@ export default function DashboardArea() {
           </>
         )}
       </div>
-      <button
-        className="p-4 my-2 bg-indigo-50 dark:bg-indigo-600 dark:text-white"
-        onClick={() => fetchData()}
-      >
-        get data
-      </button>
+      {meetingTableData.length > 0 && <MeetingTable data={meetingTableData} />}
     </div>
   );
 }

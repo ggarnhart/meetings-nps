@@ -7,7 +7,7 @@ import { buildRateMessage } from "../../../messages/index";
 // send rate message
 export default async (req, res) => {
   const { body } = req;
-
+  console.log(body);
   try {
     const teams = await findTeamBySlackTeamId(body.team_id); // should only be one, obviously, but it passes it back in an array
     const team = teams[0];
