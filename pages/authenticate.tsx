@@ -4,9 +4,12 @@ import { useEffect } from "react";
 import { addOrReturnTeamMember } from "../supabase/teamMembers";
 import { v4 as uuidv4 } from "uuid";
 import { findTeamBySlackTeamId } from "../supabase/teams";
+import { useAuth } from "../AppContext";
 export default function Authenticate() {
   const router = useRouter();
   const { code } = router.query;
+
+  const { teamMember, setTeamMember } = useAuth();
 
   useEffect(() => {
     const confirmLogin = async () => {
@@ -37,7 +40,7 @@ export default function Authenticate() {
               slack_user_id: authed_user.id,
               access_token: authed_user.access_token,
             });
-            console.log(teamMember);
+            setTeamMember(teamMember);
           }
         } catch (err) {
           console.error(err);
