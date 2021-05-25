@@ -1,7 +1,12 @@
 import groupBy from "lodash/groupBy";
 import moment from "moment";
 import { stringify } from "uuid";
-import { supabase, supabaseTables, SupabaseMeeting } from "../supabase";
+import {
+  supabase,
+  supabaseTables,
+  SupabaseMeeting,
+  SupabaseUser,
+} from "../supabase";
 
 export const addMeeting = async (meetingObject: SupabaseMeeting) => {
   try {
@@ -40,14 +45,35 @@ export const godModeMeetings = async () => {
 
 type QueriedRating = {
   rating: number;
+  slack_user_id?: string;
 };
 
-export type MeetingsAndRatings = {
+export type MeetingAndRatings = {
   name: string;
   gid: any;
   date_created: string;
   ratings: Array<QueriedRating>;
   averageRating?: number;
+};
+
+export const getMeetingByMeetingGid = async (gid: any) => {
+  try {
+    const { data: meetings, error } = await supabase
+      .from(supabaseTables.meetings)
+      .select("name, gid, date_created, ratings(rating, user_id)")
+      .eq("gid", gid);
+    console.log(meetings);
+    if (meetings) {
+      let meeting: MeetingAndRatings = meetings[0];
+
+      return meeting;
+    } else {
+      console.error(error);
+    }
+  } catch (err) {
+    console.log("Error in getting meetings by team");
+    console.error(err);
+  }
 };
 
 export const getMeetingsByTeam = async (teamGid: any) => {
@@ -57,7 +83,7 @@ export const getMeetingsByTeam = async (teamGid: any) => {
       .select("name, gid, date_created, ratings(rating)")
       .eq("team_gid", teamGid);
     if (meetingsUntyped) {
-      let meetings: Array<MeetingsAndRatings> = meetingsUntyped;
+      let meetings: Array<MeetingAndRatings> = meetingsUntyped;
       meetings.sort(
         (a, b) =>
           new Date(b.date_created).getTime() -

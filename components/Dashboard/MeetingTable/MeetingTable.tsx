@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Square, SquareCheck, SquareMinus } from "tabler-icons-react";
 import TableRow from "./TableRow";
-import { MeetingsAndRatings } from "../../../supabase/meetings";
+import { MeetingAndRatings } from "../../../supabase/meetings";
 
 interface MeetingTableProps {
   className?: string;
   title?: string;
-  data: Array<MeetingsAndRatings>;
+  data: Array<MeetingAndRatings>;
 }
 export default function MeetingTable({
   title,

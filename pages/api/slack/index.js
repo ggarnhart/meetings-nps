@@ -10,6 +10,7 @@ import {
 import { clientFromTeamId } from "../../../slackMessenger";
 import { v4 as uuidv4 } from "uuid";
 import { addInitialRating, updateRating } from "../../../supabase/ratings";
+import { ContinuousColorLegend } from "react-vis";
 
 const axios = require("axios");
 
@@ -25,6 +26,7 @@ export default async (req, res) => {
         let [buttonValue, meetingId] = extractValueAndMeetingId(value);
         let ratings = await addRating(user, meetingId, buttonValue);
         let rating = ratings[0];
+        console.log(ratings);
         if (buttonValue < 6) {
           try {
             await sendBlockMessage(

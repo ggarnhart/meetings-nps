@@ -18,6 +18,8 @@ import "react-vis/dist/style.css";
 import DashboardFilterBar from "./DashboardFilterBar";
 import DatePicker from "react-datepicker";
 import MeetingTable from "./MeetingTable/MeetingTable";
+import { supabase, supabaseTables } from "../../supabase";
+import { useWindowWidth } from "@react-hook/window-size";
 
 type PlotData = {
   x: string | number;
@@ -30,6 +32,8 @@ export default function DashboardArea() {
   const [averageRatingPerWeekData, setAverageRatingPerWeekData] = useState(
     Array<PlotData>()
   );
+  const windowWidth = useWindowWidth();
+  const [graphSideLength, setGraphSideLength] = useState(0);
 
   let today = new Date();
   let todayUtility = new Date();
@@ -42,6 +46,42 @@ export default function DashboardArea() {
   const [ratingCount, setRatingCount] = useState(-1);
   const [ratingAverage, setRatingAverage] = useState(-1);
   const [meetingTableData, setMeetingTableData] = useState(Array<any>());
+
+  useEffect(() => {
+    if (windowWidth <= 768) {
+      setGraphSideLength(windowWidth / 1.2);
+    } else {
+      setGraphSideLength(windowWidth / 2.5);
+    }
+  }, [windowWidth]);
+
+  const meetingSubscription = supabase
+    .from(supabaseTables.meetings)
+    .on("*", (payload) => meetingTableUpdate())
+    .subscribe();
+
+  const ratingSubscription = supabase
+    .from(supabaseTables.ratings)
+    .on("*", (payload) => ratingTableUpdates())
+    .subscribe();
+
+  const meetingTableUpdate = async () => {
+    setAverageMeetingRatingPerWeekData(await getMeetingAverageByWeekAsData());
+    setMeetingCount(await getMeetingsCount());
+    setMeetingTableData(
+      await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
+    );
+  };
+
+  const ratingTableUpdates = async () => {
+    setAverageRatingPerWeekData(await getRatingAverageByWeek());
+    let ratingCountAndAverage = await getRatingsCountAndAverage();
+    setRatingCount(ratingCountAndAverage.count);
+    setRatingAverage(ratingCountAndAverage.average);
+    setMeetingTableData(
+      await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
+    );
+  };
 
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -59,7 +99,7 @@ export default function DashboardArea() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full px-4 py-6 dark:bg-gray-900">
+    <div className="flex flex-col w-full px-4 py-6">
       <DashboardFilterBar
         companyName="Placeholder"
         startDate={startDate}
@@ -82,7 +122,7 @@ export default function DashboardArea() {
         </QuickStat>
       </div>
       {/* Graphs */}
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col mx-auto md:flex-row">
         {averageMeetingRatingPerWeekData &&
           averageMeetingRatingPerWeekData.length > 0 && (
             <>
@@ -93,8 +133,8 @@ export default function DashboardArea() {
                 </h3>
                 <XYPlot
                   className="my-4 bg-transparent"
-                  height={300}
-                  width={300}
+                  height={graphSideLength / 2}
+                  width={graphSideLength}
                   color="#6366F1"
                   xType="ordinal"
                   yDomain={[0, 10]}
@@ -117,8 +157,8 @@ export default function DashboardArea() {
               </h3>
               <XYPlot
                 className="my-4 bg-transparent"
-                height={300}
-                width={300}
+                height={graphSideLength / 2}
+                width={graphSideLength}
                 color="#6366F1"
                 xType="ordinal"
                 yDomain={[0, 10]}

@@ -8,6 +8,8 @@ module.exports = {
       },
       width: {
         "screen-80": "80vw",
+        "screen-90": "90vw",
+        "screen-95": "95vw",
       },
     },
   },

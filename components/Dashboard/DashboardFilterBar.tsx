@@ -1,5 +1,6 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useMetadata } from "../../AppContext";
 
 interface DashboardFilterBarInterface {
   companyName: string;
@@ -15,22 +16,25 @@ export default function DashboardFilterBar({
   setStartDate,
   setEndDate,
 }: DashboardFilterBarInterface) {
+  const { appMetadata } = useMetadata();
   return (
     <div className="flex flex-col w-full px-4 py-2 mb-4 text-white bg-indigo-600 rounded-md md:items-center md:justify-between md:flex-row text-md">
-      <h2 className="mx-1 mb-2 font-bold md:mb-0">{companyName}</h2>
+      <h2 className="mx-1 mb-2 font-bold md:mb-0">{appMetadata.teamName}</h2>
       <div className="flex flex-row items-center">
-        <DatePicker
+        {/* <DatePicker
           className="w-40 px-2 py-1 mx-1 text-center text-white bg-indigo-800 rounded"
           onChange={(date) => setStartDate(date)}
           selected={startDate}
-        />
-        <span className="text-indigo-300">&mdash;</span>
-        <DatePicker
+        /> */}
+        Earlier
+        <span className="mx-2 text-indigo-300">&mdash;</span>
+        {/* <DatePicker
           className="w-40 px-2 py-1 mx-1 text-center text-white bg-indigo-800 rounded"
           onChange={(date) => setEndDate(date)}
           selected={endDate}
           calendarClassName="mr-10"
-        />
+        /> */}
+        Now
       </div>
     </div>
   );
