@@ -12,7 +12,7 @@ export default function Install() {
       </p>
       <a
         className="my-4"
-        href="https://slack.com/oauth/v2/authorize?client_id=940252849568.2026279949603&scope=commands,incoming-webhook,chat:write,chat:write.public&user_scope=chat:write"
+        href="https://slack.com/oauth/v2/authorize?client_id=940252849568.2026279949603&scope=commands,incoming-webhook,chat:write,chat:write.public&user_scope=chat:write&redirect_uri=https%3A%2F%2Ftrytalkback.com%2Fcomplete-install"
       >
         <img
           alt="Add to Slack"
