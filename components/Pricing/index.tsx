@@ -26,7 +26,7 @@ export default function PricingHero() {
         <Feature>Dashboard</Feature>
         <Feature>Weekly Report</Feature>
         <Feature>100 Unique Users</Feature>
-        <Feature>30 Day Free Trial</Feature>
+        <Feature>Free for Duration of Beta</Feature>
         <Feature>Detailed Follow Up Questions</Feature>
         <Feature>Open-Ended Feedback Fields</Feature>
         <Feature>
