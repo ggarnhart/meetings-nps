@@ -1,5 +1,6 @@
 import Nav from "../components/Nav";
 import Link from "next/link";
+import InstallButton from "../components/InstallButton";
 export default function Home() {
   return (
     <div className="flex flex-col w-screen h-screen overflow-hidden text-white bg-indigo-800 landing-hero-image">
@@ -14,9 +15,14 @@ export default function Home() {
             review meetings in under 30 seconds.
           </p>
 
-          <span className="px-4 py-2 my-6 text-lg transition-all duration-200 ease-in-out bg-indigo-700 rounded cursor-pointer hover:shadow-xl">
-            <Link href="/pricing">See Features</Link>
-          </span>
+          <div className="flex items-center">
+            <Link href="/features">
+              <span className="px-4 py-2 my-6 mr-2 text-lg transition-all duration-200 ease-in-out bg-indigo-700 rounded-lg cursor-pointer hover:shadow-xl">
+                See Features
+              </span>
+            </Link>
+            <InstallButton />
+          </div>
         </div>
       </div>
     </div>

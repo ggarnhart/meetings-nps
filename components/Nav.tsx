@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Head from "next/head";
 import SignInButton from "./SignInButton";
+import InstallButton from "./InstallButton";
 interface NavProps {
   pageTitle?: string;
 }
@@ -11,7 +12,9 @@ export default function Nav({ pageTitle }: NavProps) {
         <title>{pageTitle ? pageTitle : "TalkBack"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h2 className="text-xl font-bold">talkback.</h2>
+      <h2 className="text-xl font-bold">
+        <Link href="/">talkback.</Link>
+      </h2>
       <div className="flex items-center justify-around">
         <div className="mx-2">
           <Link href="/">Home</Link>
@@ -19,9 +22,9 @@ export default function Nav({ pageTitle }: NavProps) {
         <div className="mx-2">
           <Link href="/features">Features</Link>
         </div>
-        <div className="mx-2">
+        {/* <div className="mx-2">
           <Link href="/pricing">Pricing</Link>
-        </div>
+        </div> */}
         <div className="mx-2">
           <Link href="/install">Install</Link>
         </div>
@@ -29,7 +32,7 @@ export default function Nav({ pageTitle }: NavProps) {
           <Link href="/dashboard">Dashboard</Link>
         </div>
         <div className="mx-2">
-          <SignInButton />
+          <InstallButton />
         </div>
       </div>
     </div>
