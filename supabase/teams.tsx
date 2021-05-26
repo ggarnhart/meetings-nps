@@ -1,14 +1,16 @@
 import { supabase, supabaseTables, SupabaseTeam } from "../supabase";
 export const addTeam = async (teamObject: SupabaseTeam) => {
   try {
-    const { data, error } = await supabase
-      .from(supabaseTables.teams)
-      .insert(teamObject);
+    if ((await findTeamBySlackTeamId(teamObject.slack_team_id)).length == 0) {
+      const { data, error } = await supabase
+        .from(supabaseTables.teams)
+        .insert(teamObject);
 
-    if (data) {
-      return data;
-    } else {
-      return error;
+      if (data) {
+        return data;
+      } else {
+        return error;
+      }
     }
   } catch (err) {
     console.log(err);
