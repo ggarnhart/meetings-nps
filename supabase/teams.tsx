@@ -1,3 +1,4 @@
+import { updateLocale } from "moment";
 import { supabase, supabaseTables, SupabaseTeam } from "../supabase";
 export const addTeam = async (teamObject: SupabaseTeam) => {
   try {
@@ -11,6 +12,12 @@ export const addTeam = async (teamObject: SupabaseTeam) => {
       } else {
         return error;
       }
+    } else {
+      const { data: updateRow, error: updateRowError } = await supabase
+        .from(supabaseTables.teams)
+        .update({ token: teamObject.token })
+        .match({ slack_team_id: teamObject.slack_team_id });
+      console.log(updateRow);
     }
   } catch (err) {
     console.log(err);

@@ -6,7 +6,17 @@ import {
 } from "../supabase";
 
 export const addInitialRating = async (ratingObject: SupabaseRating) => {
+  console.log("HERE");
   try {
+    const { data: previousRating, error: previousRatingError } = await supabase
+      .from(supabaseTables.ratings)
+      .select()
+      .match({
+        meeting_gid: ratingObject.meeting_gid,
+        user_id: ratingObject.user_id,
+      });
+    console.log(previousRating);
+
     const { data, error } = await supabase
       .from(supabaseTables.ratings)
       .insert(ratingObject);
