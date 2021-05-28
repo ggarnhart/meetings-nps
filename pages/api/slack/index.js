@@ -205,6 +205,7 @@ export const sendBlockMessage = async (
   userId = undefined,
   ephemeral = false
 ) => {
+  console.log("Sending blocks");
   blocks.forEach(async (blockMessage) => {
     try {
       if (userId !== undefined && ephemeral) {
