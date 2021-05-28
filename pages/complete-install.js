@@ -31,12 +31,8 @@ export default function CompleteInstall() {
             }
           );
 
-          console.log("?");
-
           if (result) {
             let { data } = result;
-
-            console.log(data);
 
             await addTeam({
               name: data.team.name,
