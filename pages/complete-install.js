@@ -30,7 +30,6 @@ export default function CompleteInstall() {
           );
 
           if (result) {
-            console.log(result);
             let { data } = result;
 
             await addTeam({

@@ -5,26 +5,54 @@ import {
   SupabaseRating,
 } from "../supabase";
 
-export const addInitialRating = async (ratingObject: SupabaseRating) => {
-  console.log("HERE");
+export const ratingSentFollowUp = async (ratingObject: SupabaseRating) => {
   try {
-    const { data: previousRating, error: previousRatingError } = await supabase
+    const { data, error } = await supabase
+      .from(supabaseTables.ratings)
+      .update({ sent_followup: true })
+      .match({ gid: ratingObject.gid });
+    if (data) {
+      return data;
+    } else {
+      console.error(error);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addInitialRating = async (ratingObject: SupabaseRating) => {
+  try {
+    const { data: previousRatings, error: previousRatingError } = await supabase
       .from(supabaseTables.ratings)
       .select()
       .match({
         meeting_gid: ratingObject.meeting_gid,
         user_id: ratingObject.user_id,
       });
-    console.log(previousRating);
+    if (previousRatings.length != 0) {
+      const previousRating = previousRatings[0];
+      const { data: updateRating, error: updatePreviousRatingError } =
+        await supabase
+          .from(supabaseTables.ratings)
+          .update({ rating: ratingObject.rating })
+          .match({ gid: previousRating.gid });
 
-    const { data, error } = await supabase
-      .from(supabaseTables.ratings)
-      .insert(ratingObject);
-
-    if (data) {
-      return data;
+      if (updateRating) {
+        return updateRating;
+      } else {
+        return updatePreviousRatingError;
+      }
     } else {
-      return error;
+      const { data, error } = await supabase
+        .from(supabaseTables.ratings)
+        .insert(ratingObject);
+
+      if (data) {
+        return data;
+      } else {
+        return error;
+      }
     }
   } catch (err) {
     console.log(err);
@@ -46,7 +74,6 @@ export const updateRating = async (infoToUpdate: UpdateRatingInterface) => {
       .update(infoToUpdate)
       .eq("gid", infoToUpdate.gid);
     if (data) {
-      console.log(data);
       return data;
     } else {
       console.log(error);

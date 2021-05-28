@@ -17,7 +17,6 @@ export const addTeam = async (teamObject: SupabaseTeam) => {
         .from(supabaseTables.teams)
         .update({ token: teamObject.token })
         .match({ slack_team_id: teamObject.slack_team_id });
-      console.log(updateRow);
     }
   } catch (err) {
     console.log(err);

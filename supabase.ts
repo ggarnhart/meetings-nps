@@ -49,6 +49,7 @@ export interface SupabaseRating {
   input_valued?: boolean;
   meeting_right_length?: number;
   user_id: string;
+  sent_followup?: boolean;
 }
 
 export interface SupabaseTeamMember {

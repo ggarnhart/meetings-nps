@@ -9,7 +9,11 @@ import {
 } from "../../../messages";
 import { clientFromTeamId } from "../../../slackMessenger";
 import { v4 as uuidv4 } from "uuid";
-import { addInitialRating, updateRating } from "../../../supabase/ratings";
+import {
+  addInitialRating,
+  updateRating,
+  ratingSentFollowUp,
+} from "../../../supabase/ratings";
 import { ContinuousColorLegend } from "react-vis";
 
 const axios = require("axios");
@@ -21,13 +25,13 @@ export default async (req, res) => {
     let client = await clientFromTeamId(team.id);
     if (body.actions) {
       const { action_id, value } = body.actions[0];
-      // console.log({ action_id, value });
+
       if (action_id.indexOf("buttonRating") !== -1) {
         let [buttonValue, meetingId] = extractValueAndMeetingId(value);
         let ratings = await addRating(user, meetingId, buttonValue);
         let rating = ratings[0];
-        console.log(ratings);
-        if (buttonValue < 6) {
+
+        if (!rating.sent_followup && buttonValue < 6) {
           try {
             await sendBlockMessage(
               client,
@@ -36,11 +40,12 @@ export default async (req, res) => {
               user.id,
               true
             );
+            await ratingSentFollowUp(rating);
             res.status(200).json({ data: "Okay!" });
           } catch (err) {
             console.log(err);
           }
-        } else {
+        } else if (!rating.sent_followup) {
           try {
             await sendBlockMessage(
               client,
@@ -49,10 +54,14 @@ export default async (req, res) => {
               user.id,
               true
             );
+            await ratingSentFollowUp(rating);
             res.status(200).json({ data: "Okay!" });
           } catch (err) {
             console.error(error);
           }
+        } else {
+          // this happens when you've already rated and already had a follow-up sent to you.
+          res.status(200).json({ data: "Okay!" });
         }
       } else {
         res.status(200).json({ data: "Okay!" });
