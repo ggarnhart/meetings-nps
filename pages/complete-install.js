@@ -6,6 +6,8 @@ import Spinner from "../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
 
 import { addTeam } from "../supabase/teams";
+import Image from "next/image";
+import Nav from "../components/Nav";
 
 export default function CompleteInstall() {
   const [installComplete, setInstallComplete] = useState(-1);
@@ -29,8 +31,12 @@ export default function CompleteInstall() {
             }
           );
 
+          console.log("?");
+
           if (result) {
             let { data } = result;
+
+            console.log(data);
 
             await addTeam({
               name: data.team.name,
@@ -54,7 +60,14 @@ export default function CompleteInstall() {
   }, [code]);
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen p-4 bg-gray-100 dark:bg-gray-700 dark:text-white">
-      <div className="w-12 h-12 bg-gray-300 rounded-xl" />
+      <Nav />
+      <Image
+        src="/images/SlackAvatar.png"
+        alt="talkback avatar"
+        width="64px"
+        height="64px"
+        className="rounded-sm"
+      />
       {installComplete === -1 && (
         <>
           <Spinner className="w-6 h-6 my-4 text-indigo-600" />
@@ -76,7 +89,7 @@ export default function CompleteInstall() {
           <h2 className="my-4 text-xl font-bold">
             Thanks for completing installation!
           </h2>
-          <p>Head back to Slack to start using Meetings-NPS.</p>
+          <p>Head back to Slack to start using talkback.</p>
         </>
       )}
     </div>
