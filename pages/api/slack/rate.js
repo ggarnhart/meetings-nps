@@ -20,9 +20,11 @@ export default async (req, res) => {
     let client = await clientFromTeamToken(team.token);
     console.log("HERE!");
 
-    await sendBlockMessage(client, body.channel_id, [
+    return await sendBlockMessage(client, body.channel_id, [
       buildRateMessage(meetings[0].gid),
-    ]);
+    ]).then(() => {
+      res.status(200).json("Meeting Data Collection has Started.");
+    });
   } catch (err) {
     console.log(err);
     res.status(500);
