@@ -8,6 +8,7 @@ import { buildRateMessage } from "../../../messages/index";
 export default async (req, res) => {
   const { body } = req;
   try {
+    res.status(200).json("Meeting Data Collection has Started.");
     const teams = await findTeamBySlackTeamId(body.team_id);
     const team = teams[0]; // should only be one, obviously, but it passes it back in an array
 
@@ -18,8 +19,8 @@ export default async (req, res) => {
     });
 
     let client = await clientFromTeamToken(team.token);
+    console.log("HERE!");
 
-    res.status(200).json("Meeting Data Collection has Started.");
     return await sendBlockMessage(client, body.channel_id, [
       buildRateMessage(meetings[0].gid),
     ]);
