@@ -10,7 +10,7 @@ export const clientFromTeamId = async (teamId) => {
   });
 };
 
-export const clientFromTeamToken = (teamToken) => {
+export const clientFromTeamToken = async (teamToken) => {
   return new WebClient(teamToken, {
     logLevel: LogLevel.INFO,
   });
