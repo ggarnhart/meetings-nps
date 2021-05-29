@@ -21,10 +21,11 @@ export default async (req, res) => {
     let client = clientFromTeamToken(team.token);
 
     let ratingMessage = buildRateMessage(meetings[0].gid);
-    let res = await client.chat.postMessage({
+    let messageStatus = await client.chat.postMessage({
       channel: channel,
       blocks: [ratingMessage],
     });
+    console.log(messageStatus);
     res.status(200).json("Meeting Data Collection has Started.");
   } catch (err) {
     console.log(err);
