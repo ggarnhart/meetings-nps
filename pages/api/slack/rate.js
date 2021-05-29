@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { sendBlockMessage } from "./index";
 import { clientFromTeamToken } from "../../../slackMessenger";
 import { buildRateMessage } from "../../../messages/index";
+import build from "next/dist/build";
 // send rate message
 export default async (req, res) => {
   const { body } = req;
@@ -18,9 +19,12 @@ export default async (req, res) => {
     });
 
     let client = clientFromTeamToken(team.token);
-    await sendBlockMessage(client, body.channel_id, [
-      buildRateMessage(meetings[0].gid),
-    ]);
+
+    let ratingMessage = buildRateMessage(meetings[0].gid);
+    let res = await client.chat.postMessage({
+      channel: channel,
+      blocks: [ratingMessage],
+    });
     res.status(200).json("Meeting Data Collection has Started.");
   } catch (err) {
     console.log(err);
