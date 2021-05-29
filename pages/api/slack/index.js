@@ -202,13 +202,13 @@ export const sendBlockMessage = async (
   blocks.forEach(async (blockMessage) => {
     try {
       if (userId !== undefined && ephemeral) {
-        let res = await client.chat.postEphemeral({
+        return await client.chat.postEphemeral({
           channel: channel,
           blocks: blockMessage,
           user: userId,
         });
       } else {
-        let res = await client.chat.postMessage({
+        return await client.chat.postMessage({
           channel: channel,
           blocks: blockMessage,
         });
