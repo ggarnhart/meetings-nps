@@ -16,7 +16,6 @@ import {
 } from "react-vis";
 import "react-vis/dist/style.css";
 import DashboardFilterBar from "./DashboardFilterBar";
-import DatePicker from "react-datepicker";
 import MeetingTable from "./MeetingTable/MeetingTable";
 import { supabase, supabaseTables } from "../../supabase";
 import { useWindowWidth } from "@react-hook/window-size";
