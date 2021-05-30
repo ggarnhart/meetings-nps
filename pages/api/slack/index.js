@@ -224,7 +224,7 @@ export const sendBlockMessage = async (
       }
     } catch (err) {
       console.log("issue sending message");
-      console.log(err.data);
+      console.log(err);
     }
   });
 };

@@ -18,6 +18,7 @@ export default async (req, res) => {
     });
 
     let client = clientFromTeamToken(team.token);
+
     await sendBlockMessage(client, body.channel_id, [
       buildRateMessage(meetings[0].gid),
     ]);
