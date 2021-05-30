@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addTeam } from "../supabase/teams";
 import Image from "next/image";
 import Nav from "../components/Nav";
-
+import { clientFromTeamId } from "../slackMessenger";
 import { sendBlockMessage } from "./api/slack/index";
 
 export default function CompleteInstall() {
