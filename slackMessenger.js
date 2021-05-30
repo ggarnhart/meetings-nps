@@ -6,12 +6,12 @@ export const clientFromTeamId = async (teamId) => {
   let team = teams[0];
 
   return new WebClient(team.token, {
-    logLevel: LogLevel.DEBUG,
+    logLevel: LogLevel.INFO,
   });
 };
 
 export const clientFromTeamToken = (teamToken) => {
   return new WebClient(teamToken, {
-    logLevel: LogLevel.DEBUG,
+    logLevel: LogLevel.INFO,
   });
 };
