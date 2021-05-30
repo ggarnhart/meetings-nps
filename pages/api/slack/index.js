@@ -41,7 +41,7 @@ export default async (req, res) => {
               true
             );
             await ratingSentFollowUp(rating);
-            return res.status(200).json({ data: "Okay!" });
+            res.status(200).json({ data: "Okay!" });
           } catch (err) {
             console.log(err);
           }
@@ -55,98 +55,106 @@ export default async (req, res) => {
               true
             );
             await ratingSentFollowUp(rating);
-            return res.status(200).json({ data: "Okay!" });
+            res.status(200).json({ data: "Okay!" });
           } catch (err) {
             console.error(error);
           }
         } else {
           // this happens when you've already rated and already had a follow-up sent to you.
-          return res.status(200).json({ data: "Already Rated." });
+          res.status(200).json({ data: "Okay!" });
         }
       } else {
         res.status(200).json({ data: "Okay!" });
         switch (action_id) {
           case "affirm-feedback-questions-positive":
           case "affirm-feedback-questions-negative":
-            return await sendFeedbackQuestions(
+            await sendFeedbackQuestions(
               client,
               body.response_url,
               channel.id,
               user.id,
               value
             );
+            break;
           case "decline-feedback-questions-negative":
             const replace = {
               replace_original: true,
               text: "No worries! Hope your meetings improve :)",
             };
-            return await axios.post(body.response_url, replace);
+            await axios.post(body.response_url, replace);
+            break;
           case "meeting-was-necessary":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text: "Glad to hear!",
+            });
             await updateRating({
               gid: value,
               meeting_necessary: true,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "Glad to hear!",
-            });
+            break;
           case "meeting-was-not-necessary":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text: "Yikes! Good to know. Thank you!",
+            });
             await updateRating({
               gid: value,
               meeting_necessary: false,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "Yikes! Good to know. Thank you!",
-            });
+            break;
           case "presence-was-needed":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text: "Sweet!",
+            });
             await updateRating({
               gid: value,
               input_valued: true,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "Sweet!",
-            });
-
+            break;
           case "presence-was-not-needed":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text: "Ah! So sorry about that. Thanks for the feedback.",
+            });
             await updateRating({
               gid: value,
               input_valued: false,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "Ah! So sorry about that. Thanks for the feedback.",
-            });
-
+            break;
           case "meeting-too-short":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text:
+                "A few extra minutes can definitely be helpful. Thanks for the feedback!",
+            });
             await updateRating({
               gid: value,
               meeting_right_length: -1,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "A few extra minutes can definitely be helpful. Thanks for the feedback!",
-            });
+            break;
           case "meeting-right-length":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text: "A perfectly timed meeting?! Congats!",
+            });
             await updateRating({
               gid: value,
               meeting_right_length: 0,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "A perfectly timed meeting?! Congats!",
-            });
-
+            break;
           case "meeting-too-long":
+            await axios.post(body.response_url, {
+              replace_original: true,
+              text:
+                "Thanks for the heads up. We've made note of your feedback!",
+            });
             await updateRating({
               gid: value,
               meeting_right_length: 1,
             });
-            return await axios.post(body.response_url, {
-              replace_original: true,
-              text: "Thanks for the heads up. We've made note of your feedback!",
-            });
+            break;
           case "dismiss-comment":
             const replaceCommentField = {
               replace_original: true,
@@ -175,7 +183,7 @@ const sendFeedbackQuestions = async (
   };
   try {
     await axios.post(responseUrl, replace);
-    return await sendBlockMessage(
+    await sendBlockMessage(
       client,
       channel,
       [
@@ -199,16 +207,17 @@ export const sendBlockMessage = async (
   userId = undefined,
   ephemeral = false
 ) => {
+  console.log("Sending blocks");
   blocks.forEach(async (blockMessage) => {
     try {
       if (userId !== undefined && ephemeral) {
-        return await client.chat.postEphemeral({
+        let res = await client.chat.postEphemeral({
           channel: channel,
           blocks: blockMessage,
           user: userId,
         });
       } else {
-        return await client.chat.postMessage({
+        let res = await client.chat.postMessage({
           channel: channel,
           blocks: blockMessage,
         });

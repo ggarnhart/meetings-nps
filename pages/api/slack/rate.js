@@ -17,14 +17,11 @@ export default async (req, res) => {
       team_gid: team.gid,
     });
 
-    let client = await clientFromTeamToken(team.token);
-    console.log("HERE!");
-
-    return await sendBlockMessage(client, body.channel_id, [
+    let client = clientFromTeamToken(team.token);
+    await sendBlockMessage(client, body.channel_id, [
       buildRateMessage(meetings[0].gid),
-    ]).then(() => {
-      res.status(200).json("Meeting Data Collection has Started.");
-    });
+    ]);
+    res.status(200).json("Meeting Data Collection has Started.");
   } catch (err) {
     console.log(err);
     res.status(500);
