@@ -9,6 +9,8 @@ import { addTeam } from "../supabase/teams";
 import Image from "next/image";
 import Nav from "../components/Nav";
 
+import { sendBlockMessage } from "./api/slack/index";
+
 export default function CompleteInstall() {
   const [installComplete, setInstallComplete] = useState(-1);
 
@@ -42,6 +44,16 @@ export default function CompleteInstall() {
               gid: uuidv4(),
               bot_user_id: data.bot_user_id,
             });
+
+            if (data.incoming_webhook) {
+              let client = await clientFromTeamId(data.team.id);
+
+              await sendBlockMessage(
+                client,
+                data.incoming_webhook.channel_id,
+                onboarding
+              );
+            }
 
             setInstallComplete(1);
           }

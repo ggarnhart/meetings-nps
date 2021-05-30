@@ -1,3 +1,14 @@
+export const onboarding = () => {
+  return [
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "Hi there! 👋\n I'm *talkback*. I'm here to help make your meetings more effective and efficient. 😄\n\n\n 💡To begin, `/rate-meeting`! I'll prompt you and the team to give their anonymous rating.\n\n 👩‍💻For the data focused, you can visit your dashboard with `/talkback-stats`.\n\n\n Thanks for having me!",
+      },
+    },
+  ];
+};
 export const positiveFollowUp = (ratingId) => {
   return [
     {
