@@ -52,7 +52,7 @@ export default function CompleteInstall() {
               await sendBlockMessage(
                 client,
                 data.incoming_webhook.channel_id,
-                onboarding
+                onboarding()
               );
             }
 
