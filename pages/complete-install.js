@@ -10,6 +10,7 @@ import Image from "next/image";
 import Nav from "../components/Nav";
 import { clientFromTeamId } from "../slackMessenger";
 import { sendBlockMessage } from "./api/slack/index";
+import { onboarding } from "../messages/index";
 
 export default function CompleteInstall() {
   const [installComplete, setInstallComplete] = useState(-1);
