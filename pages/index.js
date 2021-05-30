@@ -25,12 +25,12 @@ export default function Home() {
             <InstallButton />
           </div>
         </div>
-        <div className="flex flex-col w-full overflow-x-hidden lg:w-2/3">
+        <div className="flex-col hidden w-full overflow-x-hidden lg:flex pl-36 lg:w-2/3">
           <Image
             className="-mr-48"
             src="/images/ChatPreviews.png"
-            width="1926"
-            height="638"
+            width="838"
+            height="397"
           />
         </div>
       </div>
