@@ -124,8 +124,7 @@ export default async (req, res) => {
           case "meeting-too-short":
             await axios.post(body.response_url, {
               replace_original: true,
-              text:
-                "A few extra minutes can definitely be helpful. Thanks for the feedback!",
+              text: "A few extra minutes can definitely be helpful. Thanks for the feedback!",
             });
             await updateRating({
               gid: value,
@@ -145,8 +144,7 @@ export default async (req, res) => {
           case "meeting-too-long":
             await axios.post(body.response_url, {
               replace_original: true,
-              text:
-                "Thanks for the heads up. We've made note of your feedback!",
+              text: "Thanks for the heads up. We've made note of your feedback!",
             });
             await updateRating({
               gid: value,
@@ -219,7 +217,8 @@ export const sendBlockMessage = async (
   channel,
   blocks,
   userId = undefined,
-  ephemeral = false
+  ephemeral = false,
+  notificationText = ""
 ) => {
   try {
     if (userId !== undefined && ephemeral) {
@@ -232,6 +231,7 @@ export const sendBlockMessage = async (
       await client.chat.postMessage({
         channel: channel,
         blocks: blocks,
+        text: notificationText,
       });
     }
   } catch (err) {
