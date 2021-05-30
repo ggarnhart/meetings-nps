@@ -14,7 +14,6 @@ import {
   updateRating,
   ratingSentFollowUp,
 } from "../../../supabase/ratings";
-import { ContinuousColorLegend } from "react-vis";
 
 const axios = require("axios");
 
@@ -36,7 +35,7 @@ export default async (req, res) => {
             await sendBlockMessage(
               client,
               channel.id,
-              [negativeFollowUp(rating.gid)],
+              negativeFollowUp(rating.gid),
               user.id,
               true
             );
@@ -50,7 +49,7 @@ export default async (req, res) => {
             await sendBlockMessage(
               client,
               channel.id,
-              [positiveFollowUp(rating.gid)],
+              positiveFollowUp(rating.gid),
               user.id,
               true
             );
@@ -64,7 +63,6 @@ export default async (req, res) => {
           res.status(200).json({ data: "Okay!" });
         }
       } else {
-        res.status(200).json({ data: "Okay!" });
         switch (action_id) {
           case "affirm-feedback-questions-positive":
           case "affirm-feedback-questions-negative":
@@ -163,6 +161,7 @@ export default async (req, res) => {
             await axios.post(body.response_url, replaceCommentField);
             break;
         }
+        res.status(200).json({ data: "Okay!" });
       }
     } else {
       res.status(200).json({ data: "Idk how you got here." });
@@ -182,19 +181,34 @@ const sendFeedbackQuestions = async (
     blocks: confirmNegativeFollowUpDesired,
   };
   try {
-    await axios.post(responseUrl, replace);
     await sendBlockMessage(
       client,
       channel,
-      [
-        wasMeetingNecessary(meetingId),
-        wasInputValued(meetingId),
-        wasMeetingRightLength(meetingId),
-      ],
+      wasMeetingNecessary(meetingId),
       // removed lastComments(meetingId), from the above array. could put it back later
       userId,
       true
     );
+
+    await sendBlockMessage(
+      client,
+      channel,
+      wasInputValued(meetingId),
+      // removed lastComments(meetingId), from the above array. could put it back later
+      userId,
+      true
+    );
+
+    await sendBlockMessage(
+      client,
+      channel,
+      wasMeetingRightLength(meetingId),
+      // removed lastComments(meetingId), from the above array. could put it back later
+      userId,
+      true
+    );
+
+    await axios.post(responseUrl, replace);
   } catch (err) {
     console.log(err);
   }
@@ -207,25 +221,22 @@ export const sendBlockMessage = async (
   userId = undefined,
   ephemeral = false
 ) => {
-  for (let i = 0; i < blocks.length; i++) {
-    const blockMessage = blocks[i];
-    try {
-      if (userId !== undefined && ephemeral) {
-        await client.chat.postEphemeral({
-          channel: channel,
-          blocks: blockMessage,
-          user: userId,
-        });
-      } else {
-        await client.chat.postMessage({
-          channel: channel,
-          blocks: blockMessage,
-        });
-      }
-    } catch (err) {
-      console.log("issue sending message");
-      console.log(err);
+  try {
+    if (userId !== undefined && ephemeral) {
+      await client.chat.postEphemeral({
+        channel: channel,
+        blocks: blocks,
+        user: userId,
+      });
+    } else {
+      await client.chat.postMessage({
+        channel: channel,
+        blocks: blocks,
+      });
     }
+  } catch (err) {
+    console.log("issue sending message");
+    console.log(err);
   }
 };
 
