@@ -207,8 +207,8 @@ export const sendBlockMessage = async (
   userId = undefined,
   ephemeral = false
 ) => {
-  console.log("Sending blocks");
-  blocks.forEach(async (blockMessage) => {
+  for (let i = 0; i < blocks.length; i++) {
+    const blockMessage = blocks[i];
     try {
       if (userId !== undefined && ephemeral) {
         await client.chat.postEphemeral({
@@ -226,7 +226,7 @@ export const sendBlockMessage = async (
       console.log("issue sending message");
       console.log(err);
     }
-  });
+  }
 };
 
 const extractValueAndMeetingId = (value) => {
