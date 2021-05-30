@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden text-white bg-indigo-800 landing-hero-image">
       <Nav />
-      <div className="flex flex-col items-center justify-center h-full mx-auto md:flex-row lg:flex-row w-screen-80">
-        <div className="flex flex-col w-full lg:w-1/3">
+      <div className="flex flex-col items-center justify-center h-full mx-auto md:flex-row xl:flex-row w-screen-80">
+        <div className="flex flex-col w-full xl:w-1/3">
           <h1 className="my-4 text-4xl font-bold">
             We spend a lot of time in meetings. Let's make the most of it.
           </h1>
@@ -25,7 +25,7 @@ export default function Home() {
             <InstallButton />
           </div>
         </div>
-        <div className="flex-col hidden w-full overflow-x-hidden lg:flex pl-36 lg:w-2/3">
+        <div className="flex-col hidden w-full overflow-x-hidden xl:flex pl-36 lg:w-2/3">
           <Image
             className="-mr-48"
             src="/images/ChatPreviews.png"
