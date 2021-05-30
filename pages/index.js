@@ -1,12 +1,13 @@
 import Nav from "../components/Nav";
 import Link from "next/link";
+import Image from "next/image";
 import InstallButton from "../components/InstallButton";
 export default function Home() {
   return (
-    <div className="flex flex-col w-screen h-screen overflow-hidden text-white bg-indigo-800 landing-hero-image">
+    <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden text-white bg-indigo-800 landing-hero-image">
       <Nav />
-      <div className="flex flex-col justify-center h-full mx-auto w-screen-80">
-        <div className="w-full lg:w-1/2">
+      <div className="flex flex-col items-center justify-center h-full mx-auto md:flex-row lg:flex-row w-screen-80">
+        <div className="flex flex-col w-full lg:w-1/3">
           <h1 className="my-4 text-4xl font-bold">
             We spend a lot of time in meetings. Let's make the most of it.
           </h1>
@@ -23,6 +24,14 @@ export default function Home() {
             </Link>
             <InstallButton />
           </div>
+        </div>
+        <div className="flex flex-col w-full overflow-x-hidden lg:w-2/3">
+          <Image
+            className="-mr-48"
+            src="/images/ChatPreviews.png"
+            width="1926"
+            height="638"
+          />
         </div>
       </div>
     </div>
