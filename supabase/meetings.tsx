@@ -45,8 +45,8 @@ export const godModeMeetings = async () => {
 type QueriedRating = {
   rating: number;
   slack_user_id?: string;
-  meeting_necessary?: boolean;
-  input_valued?: boolean;
+  meeting_necessary?: number;
+  input_valued?: number;
   meeting_right_length?: number;
 };
 
@@ -58,14 +58,14 @@ export type MeetingAndRatings = {
   averageRating?: number;
 };
 
-export const getMeetingByMeetingGid = async (gid: any) => {
+export const getMeetingByMeetingGid = async (gid: any, teamGid: any) => {
   try {
     const { data: meetings, error } = await supabase
       .from(supabaseTables.meetings)
       .select(
         "name, gid, date_created, ratings(rating, meeting_necessary, input_valued, meeting_right_length)"
       )
-      .eq("gid", gid);
+      .match({ gid: gid, team_gid: teamGid });
 
     if (meetings) {
       let meeting: MeetingAndRatings = meetings[0];
