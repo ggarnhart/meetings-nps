@@ -11,6 +11,10 @@ export default function Nav({ pageTitle }: NavProps) {
       <Head>
         <title>{pageTitle ? pageTitle : "TalkBack"}</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="A Slack Extension to Make Your Meetings Better."
+        />
       </Head>
       <h2 className="text-xl font-bold">
         <Link href="/">talkback.</Link>
