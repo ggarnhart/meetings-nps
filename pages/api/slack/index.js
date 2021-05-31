@@ -88,7 +88,7 @@ export default async (req, res) => {
             });
             await updateRating({
               gid: value,
-              meeting_necessary: true,
+              meeting_necessary: 1,
             });
             break;
           case "meeting-was-not-necessary":
@@ -98,7 +98,7 @@ export default async (req, res) => {
             });
             await updateRating({
               gid: value,
-              meeting_necessary: false,
+              meeting_necessary: 0,
             });
             break;
           case "presence-was-needed":
@@ -108,7 +108,7 @@ export default async (req, res) => {
             });
             await updateRating({
               gid: value,
-              input_valued: true,
+              input_valued: 1,
             });
             break;
           case "presence-was-not-needed":
@@ -118,7 +118,7 @@ export default async (req, res) => {
             });
             await updateRating({
               gid: value,
-              input_valued: false,
+              input_valued: 0,
             });
             break;
           case "meeting-too-short":
