@@ -69,53 +69,39 @@ export default function DashboardArea() {
 
   const meetingTableUpdate = async () => {
     setAverageMeetingRatingPerWeekData(
-      await getMeetingAverageByWeekAsData(
-        "1e90b9ec-d437-4763-8939-b2933bebf32e"
-      )
+      await getMeetingAverageByWeekAsData(teamMember.team_gid)
     );
-    setMeetingCount(
-      await getMeetingsCount("1e90b9ec-d437-4763-8939-b2933bebf32e")
-    );
-    setMeetingTableData(
-      await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
-    );
+    setMeetingCount(await getMeetingsCount(teamMember.team_gid));
+    setMeetingTableData(await getMeetingsByTeam(teamMember.team_gid));
   };
 
   const ratingTableUpdates = async () => {
     setAverageRatingPerWeekData(
-      await getRatingAverageByWeek("1e90b9ec-d437-4763-8939-b2933bebf32e")
+      await getRatingAverageByWeek(teamMember.team_gid)
     );
     let ratingCountAndAverage = await getRatingsCountAndAverage(
-      "1e90b9ec-d437-4763-8939-b2933bebf32e"
+      teamMember.team_gid
     );
     setRatingCount(ratingCountAndAverage.count);
     setRatingAverage(ratingCountAndAverage.average);
-    setMeetingTableData(
-      await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
-    );
+    setMeetingTableData(await getMeetingsByTeam(teamMember.team_gid));
   };
 
   useEffect(() => {
     const fetchGraphData = async () => {
       setAverageMeetingRatingPerWeekData(
-        await getMeetingAverageByWeekAsData(
-          "1e90b9ec-d437-4763-8939-b2933bebf32e"
-        )
+        await getMeetingAverageByWeekAsData(teamMember.team_gid)
       );
       setAverageRatingPerWeekData(
-        await getRatingAverageByWeek("1e90b9ec-d437-4763-8939-b2933bebf32e")
+        await getRatingAverageByWeek(teamMember.team_gid)
       );
-      setMeetingCount(
-        await getMeetingsCount("1e90b9ec-d437-4763-8939-b2933bebf32e")
-      );
+      setMeetingCount(await getMeetingsCount(teamMember.team_gid));
       let ratingCountAndAverage = await getRatingsCountAndAverage(
-        "1e90b9ec-d437-4763-8939-b2933bebf32e"
+        teamMember.team_gid
       );
       setRatingCount(ratingCountAndAverage.count);
       setRatingAverage(ratingCountAndAverage.average);
-      setMeetingTableData(
-        await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
-      );
+      setMeetingTableData(await getMeetingsByTeam(teamMember.team_gid));
     };
     fetchGraphData();
   }, []);
