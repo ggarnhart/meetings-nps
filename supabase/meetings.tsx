@@ -1,6 +1,5 @@
 import groupBy from "lodash/groupBy";
 import moment from "moment";
-import { stringify } from "uuid";
 import {
   supabase,
   supabaseTables,
@@ -130,10 +129,11 @@ export const getRatingsByMeetings = async (meetingGid: any) => {
   }
 };
 
-export const getMeetingsByWeek = async () => {
+export const getMeetingsByWeek = async (teamGid: any) => {
   const { data: meetings, error } = await supabase
     .from(supabaseTables.meetings)
-    .select(`date_created, ratings(rating)`);
+    .select(`date_created, ratings(rating)`)
+    .eq("team_gid", teamGid);
   if (meetings) {
     // sort the dates.
     meetings.sort(
@@ -178,8 +178,8 @@ export const getMeetingRatingAverage = (meeting: any) => {
 
 // averages the meeting's averages. So if one meeting has 100 ratings, it's weighted the same as a meeting with 10 ratings.
 // just a thought.
-export const getMeetingAverageByWeekAsData = async () => {
-  let meetingsByWeek = await getMeetingsByWeek();
+export const getMeetingAverageByWeekAsData = async (teamGid: any) => {
+  let meetingsByWeek = await getMeetingsByWeek(teamGid);
   let weekKeys = Object.keys(meetingsByWeek);
 
   let weekAveragePairs = weekKeys.map((key, index) => {
@@ -209,8 +209,8 @@ export const getMeetingAverageByWeekAsData = async () => {
 };
 
 // averages the ratings's averages. So if 10 ratings are 10 and 1 rating is 1 for a given week, the result will be 9.18
-export const getRatingAverageByWeek = async () => {
-  let meetingsByWeek = await getMeetingsByWeek();
+export const getRatingAverageByWeek = async (teamGid: any) => {
+  let meetingsByWeek = await getMeetingsByWeek(teamGid);
 
   let weekKeys = Object.keys(meetingsByWeek);
 
@@ -244,18 +244,20 @@ export const getRatingAverageByWeek = async () => {
   return weekAveragePairs;
 };
 
-export const getMeetingsCount = async () => {
+export const getMeetingsCount = async (teamGid: any) => {
   const { data, error } = await supabase
     .from(supabaseTables.meetings)
-    .select("name, gid, date_created");
+    .select("name, gid, date_created")
+    .eq("team_gid", teamGid);
 
   return data.length;
 };
 
-export const getRatingsCountAndAverage = async () => {
+export const getRatingsCountAndAverage = async (teamGid: any) => {
   const { data: meetings, error } = await supabase
     .from(supabaseTables.meetings)
-    .select(`ratings(rating)`);
+    .select(`ratings(rating)`)
+    .eq("team_gid", teamGid);
 
   let allRatings = Array<number>();
   meetings.forEach((meeting) => {
@@ -274,11 +276,14 @@ export const getRatingsCountAndAverage = async () => {
   };
 };
 
-export const getSpecificMeetingDetails = async (meetingGid: any) => {
+export const getSpecificMeetingDetails = async (
+  meetingGid: any,
+  teamGid: any
+) => {
   const { data: meeting, error } = await supabase
     .from(supabaseTables.meetings)
     .select(`*, ratings(*)`)
-    .eq("gid", meetingGid);
+    .match({ gid: meetingGid, team_gid: teamGid });
   if (meeting) {
     return meeting;
   } else {

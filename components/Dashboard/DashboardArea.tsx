@@ -19,6 +19,7 @@ import DashboardFilterBar from "./DashboardFilterBar";
 import MeetingTable from "./MeetingTable/MeetingTable";
 import { supabase, supabaseTables } from "../../supabase";
 import { useWindowWidth } from "@react-hook/window-size";
+import { useAuth, useMetadata } from "../../AppContext";
 
 type PlotData = {
   x: string | number;
@@ -26,6 +27,8 @@ type PlotData = {
 };
 
 export default function DashboardArea() {
+  const { teamMember } = useAuth();
+
   const [averageMeetingRatingPerWeekData, setAverageMeetingRatingPerWeekData] =
     useState(Array<PlotData>());
   const [averageRatingPerWeekData, setAverageRatingPerWeekData] = useState(
@@ -65,16 +68,26 @@ export default function DashboardArea() {
     .subscribe();
 
   const meetingTableUpdate = async () => {
-    setAverageMeetingRatingPerWeekData(await getMeetingAverageByWeekAsData());
-    setMeetingCount(await getMeetingsCount());
+    setAverageMeetingRatingPerWeekData(
+      await getMeetingAverageByWeekAsData(
+        "1e90b9ec-d437-4763-8939-b2933bebf32e"
+      )
+    );
+    setMeetingCount(
+      await getMeetingsCount("1e90b9ec-d437-4763-8939-b2933bebf32e")
+    );
     setMeetingTableData(
       await getMeetingsByTeam("1e90b9ec-d437-4763-8939-b2933bebf32e")
     );
   };
 
   const ratingTableUpdates = async () => {
-    setAverageRatingPerWeekData(await getRatingAverageByWeek());
-    let ratingCountAndAverage = await getRatingsCountAndAverage();
+    setAverageRatingPerWeekData(
+      await getRatingAverageByWeek("1e90b9ec-d437-4763-8939-b2933bebf32e")
+    );
+    let ratingCountAndAverage = await getRatingsCountAndAverage(
+      "1e90b9ec-d437-4763-8939-b2933bebf32e"
+    );
     setRatingCount(ratingCountAndAverage.count);
     setRatingAverage(ratingCountAndAverage.average);
     setMeetingTableData(
@@ -84,10 +97,20 @@ export default function DashboardArea() {
 
   useEffect(() => {
     const fetchGraphData = async () => {
-      setAverageMeetingRatingPerWeekData(await getMeetingAverageByWeekAsData());
-      setAverageRatingPerWeekData(await getRatingAverageByWeek());
-      setMeetingCount(await getMeetingsCount());
-      let ratingCountAndAverage = await getRatingsCountAndAverage();
+      setAverageMeetingRatingPerWeekData(
+        await getMeetingAverageByWeekAsData(
+          "1e90b9ec-d437-4763-8939-b2933bebf32e"
+        )
+      );
+      setAverageRatingPerWeekData(
+        await getRatingAverageByWeek("1e90b9ec-d437-4763-8939-b2933bebf32e")
+      );
+      setMeetingCount(
+        await getMeetingsCount("1e90b9ec-d437-4763-8939-b2933bebf32e")
+      );
+      let ratingCountAndAverage = await getRatingsCountAndAverage(
+        "1e90b9ec-d437-4763-8939-b2933bebf32e"
+      );
       setRatingCount(ratingCountAndAverage.count);
       setRatingAverage(ratingCountAndAverage.average);
       setMeetingTableData(

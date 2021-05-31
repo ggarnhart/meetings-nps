@@ -13,7 +13,7 @@ export default function Home() {
           </h1>
           <p className="mt-4 mb-6 text-lg">
             <span className="font-bold">Talkback</span> gives your team tools to
-            review meetings in under 30 seconds.
+            improve meetings in under 30 seconds.
           </p>
 
           <div className="flex items-center">
