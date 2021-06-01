@@ -35,7 +35,12 @@ export default function Authenticate() {
             let { data } = result;
             let { authed_user, team } = data;
 
-            console.log(authed_user);
+            /**
+             * access_token: "ACCESS TOTKEN TYPE"
+             * id: "USER ID"
+             * scope: "PERMISSIONS"
+             * token_type: "user"
+             */
 
             let teams = await findTeamBySlackTeamId(team.id);
             let foundTeam = teams[0];

@@ -174,7 +174,9 @@ export const getMeetingRatingAverage = (meeting: any) => {
         (accumulator, cur) => accumulator + cur.rating,
         0
       ) / meeting.ratings.length;
-    return average;
+    if (!isNaN(average)) {
+      return average;
+    }
   } else {
     console.error("No ratings found for this meeting");
     return;
@@ -201,15 +203,21 @@ export const getMeetingAverageByWeekAsData = async (teamGid: any) => {
     let weekStartString = moment(weekStartDate).format("MMM Do");
 
     // now, make an array of the average
-    let meetingAverages = currentWeekOfMeetings.map((m) => {
+    let meetingAveragesWithUndefined = currentWeekOfMeetings.map((m) => {
       return getMeetingRatingAverage(m);
     });
+
+    // remove undefined
+    let meetingAverages = meetingAveragesWithUndefined.filter(
+      (item) => undefined !== item
+    );
 
     let weeklyAverage =
       meetingAverages.reduce((accumulator, cur) => accumulator + cur, 0) /
       meetingAverages.length;
     return { x: `Week of ${weekStartString}`, y: weeklyAverage };
   });
+
   return weekAveragePairs;
 };
 
