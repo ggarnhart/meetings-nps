@@ -9,7 +9,9 @@ export default function FeatureHero() {
         <div className="flex flex-col my-4">
           <Feature>Anonymous Meeting Ratings</Feature>
           <Feature>Ratings Dashboard</Feature>
-          <Feature>Comments Box</Feature>
+          <Feature>
+            Comments Box &mdash; <span className="italic">Coming Soon</span>
+          </Feature>
           <Feature>Free</Feature>
         </div>
         <InstallButton />
