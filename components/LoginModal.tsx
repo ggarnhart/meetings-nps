@@ -1,4 +1,5 @@
 import SignInButton from "./SignInButton";
+import Link from "next/link";
 
 export default function LoginModal() {
   return (
@@ -16,6 +17,14 @@ export default function LoginModal() {
               You're almost there! Sign in and we'll set things up.
             </p>
             <SignInButton />
+            <p className="mt-6 text-sm">
+              Heads up: you'll need to install talkback in your workspace first.
+              You can do that{" "}
+              <Link href="/install">
+                <span className="underline cursor-pointer">here</span>
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </div>

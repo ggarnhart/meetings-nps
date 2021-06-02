@@ -7,6 +7,18 @@ export const onboarding = () => {
         text: "Hi there! 👋\n I'm *talkback*. I'm here to help make your meetings more effective and efficient. 😄\n\n\n 💡To begin, `/rate-meeting`! I'll prompt you and the team to give their anonymous rating.\n\n 👩‍💻For the data focused, you can visit your dashboard with `/talkback-stats`.\n\n\n Thanks for having me!",
       },
     },
+    {
+      type: "divider",
+    },
+    {
+      type: "context",
+      elements: [
+        {
+          type: "mrkdwn",
+          text: "talkback is made by <https://twitter.com/ggarnhart|greg>. If you use talkback, you can't take him to court for anything related to the use of this app. If you do not agree with those terms, uninstall the application.",
+        },
+      ],
+    },
   ];
 };
 export const positiveFollowUp = (ratingId) => {
